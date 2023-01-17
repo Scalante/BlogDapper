@@ -17,10 +17,10 @@ public partial class Publicacion
 
     public string Etiquetas { get; set; }
 
-    public int? UsuarioId { get; set; }
+    public int UsuarioId { get; set; }
 
     [InverseProperty("Publicacion")]
-    public virtual ICollection<Comentario> Comentarios { get; } = new HashSet<Comentario>();
+    public virtual ICollection<Comentario> Comentarios { get; set; } = new HashSet<Comentario>();
 
     //[ForeignKey("UsuarioId")]
     //[InverseProperty("Publicaciones")]
