@@ -3,6 +3,8 @@ using System;
 using Core.Interfaces;
 using Infrastructure.Data;
 using Infrastructure.Repositories;
+using Microsoft.OpenApi.Models;
+using System.Reflection;
 
 namespace API
 {
@@ -24,15 +26,23 @@ namespace API
 
             //Permite evitar los ciclos infinitos en las relaciones de clases
             //services.AddControllers().AddJsonOptions(x => x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
-            
+
             //No muestra en la respuesta de la API los atributos que tienen como valor NULL, esto funciona con Controllers
-            //services.AddControllers().AddJsonOptions(opciones => opciones.JsonSerializerOptions.DefaultIgnoreCondition
-            //                = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull);
+            services.AddControllers().AddJsonOptions(opciones => opciones.JsonSerializerOptions.DefaultIgnoreCondition
+                            = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull);
 
 
             //Configuración de Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             services.AddEndpointsApiExplorer();
-            services.AddSwaggerGen();
+            services.AddSwaggerGen(c =>
+            {
+                {
+                    var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                    c.IncludeXmlComments(xmlPath);
+                }
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Blog API", Version = "v1" });
+            });
 
             services.AddCors(options =>
             {
@@ -57,11 +67,11 @@ namespace API
             app.UseRouting();
             app.UseCors("CorsRule");
 
-          
-            //app.UseEndpoints(endpoints =>
-            //{
-            //    endpoints.MapControllers();
-            //});
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+            });
         }
     }
 }

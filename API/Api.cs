@@ -14,6 +14,12 @@ namespace Api
             app.MapDelete("/publicaciones/{id}", EliminarPublicacion);
         }
 
+        /// <summary>
+        /// A nivel empresarial documentar de esta manera es correcto? --Ejemplo--
+        /// </summary>
+        /// <param name="publicacionRepository"></param>
+        /// <param name="id"></param>
+        /// <returns>pRUEBAAAAAAAAAAAAAAAAAAAAAAAAAAAAA</returns>
         private static async Task<IResult> EliminarPublicacion(IPublicacionRepository publicacionRepository, int id)
         {
             try
